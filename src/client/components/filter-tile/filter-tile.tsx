@@ -228,6 +228,19 @@ export class FilterTile extends React.Component<FilterTileProps, FilterTileState
     e.stopPropagation();
   }
 
+  switchFilterOnOff(itemBlank: ItemBlank, e: MouseEvent){
+    console.log(itemBlank, e, this.props)
+    const { essence, clicker } = this.props;
+    if (itemBlank.clause) {
+      if (itemBlank.source === "from-highlight") {
+        clicker.dropHighlight();
+      } else {
+        clicker.changeFilter(essence.filter.removeClause(itemBlank.clause.reference));
+      }
+    }
+    e.stopPropagation();
+  }
+
   dragStart(dimension: Dimension, clause: FilterClause, e: DragEvent) {
     const dataTransfer = e.dataTransfer;
     dataTransfer.effectAllowed = "all";
@@ -425,6 +438,12 @@ export class FilterTile extends React.Component<FilterTileProps, FilterTileState
     </div>;
   }
 
+  renderSwitchOnOffButton(itemBlank: ItemBlank) {
+    return <div className="onOff" onClick={this.switchFilterOnOff.bind(this, itemBlank)}>
+      <SvgIcon svg={require("../../icons/check.svg")} />
+    </div>;
+  }
+
   renderTimeShiftLabel(dimension: Dimension): string {
     const { essence } = this.props;
     if (!dimension.expression.equals(essence.dataCube.timeAttribute)) return null;
@@ -463,6 +482,7 @@ export class FilterTile extends React.Component<FilterTileProps, FilterTileState
       >
         {this.renderItemLabel(dimension, clause, timezone)}
         {this.renderRemoveButton(itemBlank)}
+        {this.renderSwitchOnOffButton(itemBlank)}
       </div>;
     }
 
@@ -478,6 +498,7 @@ export class FilterTile extends React.Component<FilterTileProps, FilterTileState
       >
         {this.renderItemLabel(dimension, clause, timezone)}
         {this.renderRemoveButton(itemBlank)}
+        {this.renderSwitchOnOffButton(itemBlank)}
       </div>;
     } else {
       return <div
@@ -488,6 +509,7 @@ export class FilterTile extends React.Component<FilterTileProps, FilterTileState
       >
         <div className="reading">{formatLabelDummy(dimension)}</div>
         {this.renderRemoveButton(itemBlank)}
+        {this.renderSwitchOnOffButton(itemBlank)}
       </div>;
     }
   }

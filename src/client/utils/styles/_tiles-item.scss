@@ -74,6 +74,28 @@
     }
   }
 
+  .onOff {
+    @include center(27px, 27px);
+    @include internet-explorer {
+      padding-top: 0;
+    }
+    text-align: center;
+    padding-top: 9px;
+    cursor: pointer;
+
+    svg {
+      width: 10px;
+    }
+
+    path {
+      fill: hsla(0, 0, 0, 0.2);
+    }
+
+    &:hover path {
+      fill: hsla(0, 0, 0, 0.5);
+    }
+  }
+
 }
 
 %tiles-item-h {
