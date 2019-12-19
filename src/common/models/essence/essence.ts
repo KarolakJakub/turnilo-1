@@ -449,6 +449,7 @@ export class Essence extends ImmutableRecord<EssenceValue>(defaultEssence) {
   }
 
   public changeFilter(filter: Filter, removeHighlight = false): Essence {
+    console.log("test essence change filter this", this)
     const { filter: oldFilter } = this;
 
     return this

@@ -22,7 +22,7 @@ import { Unary } from "../../utils/functional/functional";
 import { DataCube } from "../data-cube/data-cube";
 import { Dimension } from "../dimension/dimension";
 import { Dimensions } from "../dimension/dimensions";
-import { FilterClause, FilterDefinition, fromJS, RelativeTimeFilterClause, StringFilterAction, StringFilterClause, toExpression } from "../filter-clause/filter-clause";
+import { FilterClause, FilterDefinition, fromJS, RelativeTimeFilterClause, StringFilterAction, StringFilterClause, toExpression, NumberFilterClause } from "../filter-clause/filter-clause";
 
 export enum FilterMode { EXCLUDE = "exclude", INCLUDE = "include", REGEX = "regex", CONTAINS = "contains" }
 
@@ -33,7 +33,7 @@ export interface FilterValue {
 const defaultFilter: FilterValue = { clauses: List([]) };
 
 export class Filter extends Record<FilterValue>(defaultFilter) {
-
+  
   static fromClause(clause: FilterClause): Filter {
     return this.fromClauses([clause]);
   }
@@ -133,6 +133,14 @@ export class Filter extends Record<FilterValue>(defaultFilter) {
     const index = this.indexOfClause(reference);
     if (index === -1) return this;
     return this.updateClauses(clauses => clauses.delete(index));
+  }
+
+  public switchOff(reference: string): Filter {
+    const tempClause = new NumberFilterClause({});
+    console.log("TEMP CLAUSE", tempClause);
+    const index = this.indexOfClause(reference);
+    if (index === -1) return this;
+    return this.replaceByIndex(index, tempClause);
   }
 
   public filteredOn(reference: string): boolean {

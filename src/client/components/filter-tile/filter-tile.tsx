@@ -36,6 +36,7 @@ import { BubbleMenu } from "../bubble-menu/bubble-menu";
 import { FancyDragIndicator } from "../fancy-drag-indicator/fancy-drag-indicator";
 import { FilterMenu } from "../filter-menu/filter-menu";
 import { SvgIcon } from "../svg-icon/svg-icon";
+import { EMPTY_FILTER } from "../../../common/models/filter/filter";
 import "./filter-tile.scss";
 
 const FILTER_CLASS_NAME = "filter";
@@ -229,13 +230,13 @@ export class FilterTile extends React.Component<FilterTileProps, FilterTileState
   }
 
   switchFilterOnOff(itemBlank: ItemBlank, e: MouseEvent){
-    console.log(itemBlank, e, this.props)
+    console.log("filter tile test itembl, e, this", itemBlank, e, this)
     const { essence, clicker } = this.props;
     if (itemBlank.clause) {
       if (itemBlank.source === "from-highlight") {
         clicker.dropHighlight();
       } else {
-        clicker.changeFilter(essence.filter.removeClause(itemBlank.clause.reference));
+        clicker.changeFilter(essence.filter.switchOff(itemBlank.clause.reference));
       }
     }
     e.stopPropagation();
@@ -439,6 +440,9 @@ export class FilterTile extends React.Component<FilterTileProps, FilterTileState
   }
 
   renderSwitchOnOffButton(itemBlank: ItemBlank) {
+    const { essence } = this.props;
+    const dataCube = essence.dataCube;
+    if (itemBlank.dimension.expression.equals(dataCube.timeAttribute)) return null;
     return <div className="onOff" onClick={this.switchFilterOnOff.bind(this, itemBlank)}>
       <SvgIcon svg={require("../../icons/check.svg")} />
     </div>;
